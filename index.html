@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Quiz de Conhecimentos</title>
+    <meta name="description" content="Quiz de conhecimentos gerais com 10 temas, 3 níveis de dificuldade, sons e histórico local.">
+    <meta name="theme-color" content="#4f46e5">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <main id="app">
+        <!-- TELA INICIAL -->
+        <section id="screen-home" class="screen active" aria-labelledby="home-title">
+            <div class="container home-container">
+                <header class="hero">
+                    <span class="logo-icon" aria-hidden="true">🧠</span>
+                    <h1 id="home-title" class="title">Quiz de Conhecimentos</h1>
+                    <p class="subtitle">Desafie sua mente. Escolha o tema, a dificuldade e a quantidade de perguntas; responda e veja sua pontuação no final.</p>
+                </header>
+
+                <div class="config-panel">
+                    <div class="config-group">
+                        <label class="config-label" for="select-theme">Escolha o tema</label>
+                        <select id="select-theme" class="select-input">
+                            <option value="aleatorio" selected>Aleatório (mistura tudo)</option>
+                            <option value="gerais">Conhecimentos Gerais</option>
+                            <option value="historia">História</option>
+                            <option value="geografia">Geografia</option>
+                            <option value="ciencia">Ciência</option>
+                            <option value="tecnologia">Tecnologia</option>
+                            <option value="cultura">Cultura</option>
+                            <option value="esportes">Esportes</option>
+                            <option value="brasil">Brasil</option>
+                            <option value="curiosidades">Curiosidades</option>
+                        </select>
+                    </div>
+
+                    <div class="config-group">
+                        <label class="config-label" for="select-difficulty">Escolha a dificuldade</label>
+                        <select id="select-difficulty" class="select-input">
+                            <option value="aleatoria" selected>Aleatória</option>
+                            <option value="facil">Fácil</option>
+                            <option value="medio">Médio</option>
+                            <option value="dificil">Difícil</option>
+                        </select>
+                    </div>
+
+                    <div class="config-group">
+                        <span class="config-label" id="qty-label">Quantidade de perguntas</span>
+                        <div class="quantity-options" role="group" aria-labelledby="qty-label">
+                            <button type="button" class="qty-btn" data-qty="5" aria-pressed="false">5</button>
+                            <button type="button" class="qty-btn active" data-qty="10" aria-pressed="true">10</button>
+                            <button type="button" class="qty-btn" data-qty="15" aria-pressed="false">15</button>
+                            <button type="button" class="qty-btn" data-qty="20" aria-pressed="false">20</button>
+                        </div>
+                    </div>
+
+                    <div class="config-group sound-row">
+                        <span class="config-label">Efeitos sonoros</span>
+                        <button type="button" id="btn-sound-toggle" class="btn-toggle" aria-pressed="true">
+                            <span id="sound-icon" aria-hidden="true">🔊</span>
+                            <span id="sound-label">Som ligado</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="home-actions">
+                    <button type="button" id="btn-start" class="btn-primary btn-large">
+                        Começar Quiz
+                    </button>
+                    <button type="button" id="btn-history-home" class="btn-secondary">
+                        Histórico
+                    </button>
+                </div>
+
+                <!-- POSICAO 1 - banner da tela inicial (Google AdSense).
+                     Fica oculto enquanto nao houver identificadores configurados em js/ads.js
+                     e nao reserva espaco quando os anuncios estao desativados. -->
+                <aside id="ad-slot-home" class="ad-slot hidden" aria-label="Publicidade">
+                    <span class="ad-label">Publicidade</span>
+                    <div class="ad-frame"></div>
+                </aside>
+
+                <p class="privacy-note">
+                    Sem cadastro. Seu histórico fica só neste dispositivo.
+                    <a class="privacy-link" href="./privacidade.html">Política de privacidade</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- TELA DO QUIZ -->
+        <section id="screen-quiz" class="screen" aria-labelledby="question-text">
+            <header class="topbar">
+                <div class="topbar-inner">
+                    <button type="button" id="btn-quit-quiz" class="btn-round" aria-label="Sair do quiz e voltar ao início">✕</button>
+                    <div class="progress-wrap">
+                        <div class="progress-meta">
+                            <span id="quiz-counter">Pergunta 1 de 10</span>
+                            <span id="score-live" class="score-live">Pontos: 0</span>
+                        </div>
+                        <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-role">
+                            <div id="progress-bar" class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="topbar-spacer" aria-hidden="true"></div>
+                </div>
+            </header>
+
+            <div class="container quiz-container">
+                <p id="quiz-notice" class="quiz-notice hidden" role="status" aria-live="polite"></p>
+                <h2 id="question-text" class="question-text">Carregando pergunta...</h2>
+
+                <div id="alternatives-list" class="alternatives-list" role="group" aria-label="Alternativas"></div>
+
+                <div id="feedback-section" class="feedback hidden" role="status" aria-live="polite">
+                    <span id="feedback-icon" class="feedback-icon" aria-hidden="true"></span>
+                    <p id="feedback-message" class="feedback-title"></p>
+                    <p id="explanation-text" class="feedback-explanation"></p>
+                </div>
+
+                <button type="button" id="btn-next-question" class="btn-primary btn-next hidden">
+                    Próxima pergunta
+                </button>
+            </div>
+        </section>
+
+        <!-- TELA DE RESULTADO -->
+        <section id="screen-result" class="screen" aria-labelledby="result-title">
+            <div class="container result-container">
+                <h2 id="result-title" class="result-title">Resultado</h2>
+
+                <div class="score-ring" id="score-ring">
+                    <span id="score-percent" class="score-percent">0%</span>
+                    <span class="score-caption">de aproveitamento</span>
+                </div>
+
+                <p class="result-headline" id="result-headline">Você acertou 0 de 0</p>
+                <p class="result-points" id="result-points">0 pontos</p>
+                <p class="result-message" id="result-message"></p>
+
+                <dl class="result-meta">
+                    <div class="meta-row"><dt>Acertos</dt><dd id="result-correct">0</dd></div>
+                    <div class="meta-row"><dt>Erros</dt><dd id="result-wrong">0</dd></div>
+                    <div class="meta-row"><dt>Tema</dt><dd id="result-theme">—</dd></div>
+                    <div class="meta-row"><dt>Dificuldade</dt><dd id="result-difficulty">—</dd></div>
+                    <div class="meta-row"><dt>Perguntas</dt><dd id="result-qty">0</dd></div>
+                </dl>
+
+                <!-- POSICAO 2 - banner da tela de resultado (Google AdSense).
+                     Depois das informacoes de pontuacao e antes das acoes, para nao
+                     competir com os botoes de jogar novamente e compartilhar. -->
+                <aside id="ad-slot-result" class="ad-slot hidden" aria-label="Publicidade">
+                    <span class="ad-label">Publicidade</span>
+                    <div class="ad-frame"></div>
+                </aside>
+
+                <div class="result-actions">
+                    <button type="button" id="btn-play-again" class="btn-primary">Jogar novamente</button>
+                    <button type="button" id="btn-share-result" class="btn-secondary">Compartilhar resultado</button>
+                    <button type="button" id="btn-pick-theme" class="btn-secondary">Escolher outro tema</button>
+                    <button type="button" id="btn-history-result" class="btn-secondary">Ver histórico</button>
+                </div>
+
+                <p id="copy-feedback" class="copy-feedback hidden" role="status" aria-live="polite">Resultado copiado!</p>
+                <a id="whatsapp-share" class="share-link hidden" href="#" target="_blank" rel="noopener noreferrer">Abrir no WhatsApp</a>
+            </div>
+        </section>
+
+        <!-- TELA DE HISTÓRICO -->
+        <section id="screen-history" class="screen" aria-labelledby="history-title">
+            <header class="topbar">
+                <div class="topbar-inner">
+                    <button type="button" id="btn-back-history" class="btn-round" aria-label="Voltar ao início">←</button>
+                    <h2 id="history-title" class="topbar-title">Meus últimos resultados</h2>
+                    <div class="topbar-spacer" aria-hidden="true"></div>
+                </div>
+            </header>
+
+            <div class="container history-container">
+                <div id="history-empty" class="empty-state">
+                    <span class="empty-icon" aria-hidden="true">📈</span>
+                    <p>Ainda não há resultados salvos.</p>
+                    <button type="button" id="btn-start-from-history" class="btn-primary">Começar Quiz</button>
+                </div>
+
+                <ul id="history-list" class="history-list hidden"></ul>
+
+                <div id="history-actions" class="history-actions hidden">
+                    <button type="button" id="btn-clear-history" class="btn-danger">Limpar histórico</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <noscript>
+        <p style="padding:24px;color:#fff;font-family:sans-serif">Este quiz precisa de JavaScript ativado para funcionar.</p>
+    </noscript>
+
+    <script src="./js/questions.js"></script>
+    <script src="./js/sounds.js"></script>
+    <script src="./js/history.js"></script>
+    <script src="./js/quiz.js"></script>
+    <script src="./js/ads.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>
