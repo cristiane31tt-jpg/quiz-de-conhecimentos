@@ -1,0 +1,22 @@
+# Dependencias e artefatos gerados pelo empacotamento Android.
+# O site publicado continua sendo servido a partir da raiz do repositorio.
+node_modules/
+www/
+android/
+.gradle/
+build/
+
+# Saidas de build e assinatura (nunca commitar chaves).
+*.apk
+*.aab
+*.keystore
+*.jks
+*.p12
+*.b64
+keystore.properties
+local.properties
+.env
+
+# Arquivos de sistema/editor.
+.DS_Store
+Thumbs.db

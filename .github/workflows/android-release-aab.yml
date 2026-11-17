@@ -1,0 +1,131 @@
+name: Android release AAB
+
+# Gera o AAB assinado para a Google Play Store.
+#
+# Dispara em tags `android-v*` (ex.: android-v1.0.0) ou manualmente.
+# Tags nao publicam o site: o GitHub Pages usa a branch `main`.
+#
+# Secrets obrigatorios (Settings > Secrets and variables > Actions):
+#   ANDROID_KEYSTORE_BASE64    keystore .jks convertido em base64 (uma linha)
+#   ANDROID_KEYSTORE_PASSWORD  senha do keystore
+#   ANDROID_KEY_ALIAS          alias da chave
+#   ANDROID_KEY_PASSWORD       senha da chave
+#
+# Sem esses secrets o workflow falha com mensagem explicita e nao gera AAB.
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'android-v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-release-aab:
+    name: Build signed release AAB
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Prepare web assets
+        run: npm run prepare:web
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools platforms;android-36 build-tools;36.0.0'
+
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+      - name: Configure Android, version and AdMob
+        run: npm run configure:android
+
+      - name: Verify Android project
+        run: npm run verify:android
+
+      - name: Read app version
+        id: meta
+        run: |
+          node -e "const v=require('./native/app-version.json');console.log('version=' + v.versionName + '-' + v.versionCode)" >> "$GITHUB_OUTPUT"
+
+      - name: Check signing secrets
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          missing=0
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name nao configurado. Veja PLAY_STORE.md."
+              missing=1
+            fi
+          done
+          exit $missing
+
+      - name: Decode upload keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          echo "$ANDROID_KEYSTORE_BASE64" | tr -d '\r\n' | base64 -d > "$RUNNER_TEMP/upload.jks"
+          test -s "$RUNNER_TEMP/upload.jks"
+          echo "Keystore decodificado no runner (nao commitado)."
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build signed release AAB
+        env:
+          ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/upload.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          chmod +x android/gradlew
+          cd android
+          ./gradlew --no-daemon bundleRelease -PrequireReleaseSigning
+
+      - name: Verify signed AAB
+        run: |
+          AAB="android/app/build/outputs/bundle/release/app-release.aab"
+          test -f "$AAB"
+          unzip -l "$AAB" | grep -Eq 'META-INF/[^/]+\.(RSA|EC|DSA)'
+          echo "AAB assinado encontrado."
+          ls -lh "$AAB"
+          sha256sum "$AAB"
+
+      - name: Upload release AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: quiz-de-conhecimentos-release-aab-${{ steps.meta.outputs.version }}
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 30

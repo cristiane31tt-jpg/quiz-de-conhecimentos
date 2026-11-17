@@ -20,7 +20,7 @@
             </header>
 
             <div class="container policy-container">
-                <p class="policy-updated">Última atualização: 9 de novembro de 2026.</p>
+                <p class="policy-updated">Última atualização: 13 de novembro de 2026.</p>
 
                 <h2>Resumo</h2>
                 <p>
@@ -28,23 +28,45 @@
                     o tema, a dificuldade e a quantidade de perguntas; o resultado é calculado
                     no seu navegador. O aplicativo não exige cadastro, login ou senha e não
                     solicita nome, e-mail, telefone ou qualquer outro dado pessoal.
+                    A publicidade, quando ativada, é fornecida pelo Google e está
+                    descrita na seção "Publicidade".
                 </p>
 
                 <h2>Dados guardados no seu dispositivo</h2>
                 <p>O aplicativo usa o armazenamento local (localStorage) do navegador para guardar apenas:</p>
                 <ul>
                     <li>o histórico dos últimos cinco resultados: identificador interno gerado a partir da data e hora, data, hora, tema, dificuldade, total de perguntas, acertos, erros, percentual e pontos;</li>
-                    <li>a sua preferência de efeitos sonoros (ligado ou desligado).</li>
+                    <li>a sua preferência de efeitos sonoros (ligado ou desligado);</li>
+                    <li>o controle das perguntas já utilizadas em cada combinação de tema e dificuldade, guardado na chave <code>quiz_deck_v1</code>: os identificadores das perguntas do ciclo atual, as perguntas que ainda faltam sortear e a última pergunta apresentada.</li>
                 </ul>
+                <p>
+                    O controle de perguntas usadas (chave <code>quiz_deck_v1</code>) serve para
+                    reduzir repetições entre partidas: ele registra os identificadores das
+                    perguntas já utilizadas, controla o ciclo de perguntas de cada tema e
+                    dificuldade e é preservado quando você fecha ou atualiza a página. Esses
+                    dados ficam armazenados apenas no seu dispositivo ou navegador e não são
+                    enviados a servidores para essa finalidade.
+                </p>
                 <p>
                     Essas informações permanecem no seu dispositivo e não são enviadas para
                     servidores do aplicativo. O histórico pode ser apagado pelo botão "Limpar
-                    histórico"; a preferência de som pode ser alterada pelo botão de som. Os dois
-                    podem ser removidos pelas configurações do navegador.
+                    histórico"; a preferência de som pode ser alterada pelo botão de som. Todos
+                    esses dados podem ser removidos pelas configurações do navegador.
+                </p>
+                <p>
+                    No aplicativo Android, o backup automático do sistema para esses dados está
+                    desativado. No navegador, eventuais recursos de sincronização dependem das
+                    configurações do navegador e do sistema operacional.
                 </p>
                 <p>
                     O aplicativo não utiliza cookies próprios. O localStorage não é um cookie
                     e não é enviado automaticamente a servidores.
+                </p>
+                <p>
+                    O SDK de publicidade do Google pode manter identificadores, preferências
+                    de consentimento e informações de cache no dispositivo, conforme as
+                    políticas do Google. Esses dados são controlados pelo SDK de publicidade
+                    e não fazem parte do localStorage descrito acima.
                 </p>
 
                 <h2>Coleta e compartilhamento</h2>
@@ -55,49 +77,70 @@
                     acontece quando você aciona o botão "Compartilhar resultado" e escolhe um
                     aplicativo ou serviço. Quando os anúncios do Google estiverem ativos, o
                     Google e seus parceiros poderão tratar dados conforme a seção "Publicidade".
+                    O aplicativo não vende dados pessoais e não recebe, do Google, o conteúdo
+                    individual dos dados tratados pelo SDK de publicidade.
+                </p>
+                <p>
+                    O único SDK de terceiros com finalidade publicitária incluído no aplicativo
+                    é o Google Mobile Ads (AdMob). O aplicativo não inclui SDKs próprios de
+                    análise, rastreamento ou redes sociais. As bibliotecas de infraestrutura do
+                    aplicativo, como o Capacitor, não coletam dados para publicidade.
                 </p>
 
                 <h2>Seus direitos</h2>
                 <p>
-                    Como o histórico e a preferência de som ficam no seu dispositivo, você pode
-                    consultá-los e alterá-los diretamente no navegador. O histórico pode ser
-                    apagado pelo botão "Limpar histórico"; a preferência de som pode ser alterada
-                    pelo botão de som. Para dúvidas sobre esta política, use o contato indicado
-                    ao final.
+                    Como o histórico, a preferência de som e o controle de perguntas usadas
+                    ficam no seu dispositivo, você pode consultá-los e alterá-los diretamente
+                    no navegador. O histórico pode ser apagado pelo botão "Limpar histórico";
+                    a preferência de som pode ser alterada pelo botão de som. No aplicativo
+                    Android, quando exigido, você também pode revisar ou retirar o consentimento
+                    de anúncios em "Preferências de anúncios". Para dúvidas sobre esta política,
+                    use o contato indicado ao final.
                 </p>
 
                 <h2>Publicidade</h2>
                 <p>
-                    O aplicativo está preparado para exibir anúncios do Google AdSense. Enquanto
-                    nenhum identificador oficial estiver configurado, nenhum anúncio é carregado
-                    e nenhum script de publicidade é executado.
+                    O aplicativo contém anúncios. No aplicativo Android, a publicidade é
+                    fornecida pelo Google Mobile Ads (AdMob); no site, a integração prevista é
+                    o Google AdSense. Enquanto nenhum identificador oficial de produção estiver
+                    configurado, nenhum anúncio real é solicitado. A versão de teste do
+                    aplicativo usa exclusivamente os identificadores oficiais de teste do
+                    Google, que não geram receita.
                 </p>
                 <p>
-                    Quando os anúncios forem ativados, fornecedores terceiros, incluindo o Google,
-                    poderão usar cookies para exibir anúncios com base em visitas anteriores do
-                    usuário a este e a outros sites. O uso de cookies de publicidade pelo Google
-                    permite que ele e seus parceiros exibam anúncios com base nessas visitas.
+                    Quando os anúncios forem ativados, o Google e seus parceiros poderão tratar
+                    dados como identificadores do dispositivo (incluindo o ID de publicidade),
+                    endereço IP, informações do aplicativo e do dispositivo, localização
+                    aproximada, interações com anúncios e dados de diagnóstico. Esses dados
+                    podem ser usados para entregar, limitar, medir e proteger a publicidade,
+                    incluindo a prevenção de fraude, e podem ser compartilhados com o Google e
+                    seus parceiros de publicidade conforme as políticas deles.
                 </p>
                 <p>
-                    O Google e seus parceiros também poderão usar cookies e identificadores do
-                    dispositivo para exibir, limitar e medir anúncios. Esses cookies são
-                    controlados pelo Google, não pelo aplicativo. Para saber mais:
+                    No aplicativo Android, o consentimento para anúncios personalizados é
+                    solicitado pela plataforma de gerenciamento de consentimento do Google
+                    (UMP) quando exigido pela legislação aplicável, como no Espaço Econômico
+                    Europeu, no Reino Unido e na Suíça. Quando o consentimento não permite
+                    anúncios, o banner não é exibido. O consentimento pode ser revisto ou
+                    retirado a qualquer momento na opção "Preferências de anúncios" do
+                    aplicativo, quando disponibilizada, ou nas configurações de anúncios do
+                    Google.
+                </p>
+                <p>
+                    O Google controla os cookies e identificadores usados na publicidade; o
+                    aplicativo não vende esses dados. Para saber mais:
                 </p>
                 <ul>
                     <li><a class="privacy-link" href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Como o Google usa cookies em publicidade</a></li>
                     <li><a class="privacy-link" href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Política de Privacidade do Google</a></li>
                     <li><a class="privacy-link" href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer">Gerenciar anúncios personalizados</a></li>
+                    <li><a class="privacy-link" href="https://support.google.com/admob/answer/6128543" target="_blank" rel="noopener noreferrer">Privacidade e AdMob (Google)</a></li>
                 </ul>
                 <p>
-                    O visitante pode desativar a publicidade personalizada nas Configurações de
-                    anúncios do Google, indicadas na lista acima.
-                </p>
-                <p>
-                    Para visitantes do Espaço Econômico Europeu, do Reino Unido e da Suíça, o
-                    consentimento para cookies de publicidade deve ser solicitado por uma
-                    plataforma de gestão de consentimento certificada pelo Google (CMP),
-                    configurada no painel do AdSense. O consentimento pode ser alterado ou
-                    retirado a qualquer momento pelas opções dessa mensagem.
+                    Para visitantes do Espaço Econômico Europeu, do Reino Unido e da Suíça, a
+                    mensagem de consentimento do Google (UMP) deve ser configurada no painel do
+                    AdMob antes da ativação de anúncios reais. O visitante pode desativar a
+                    publicidade personalizada nas Configurações de anúncios do Google.
                 </p>
 
                 <h2>Compartilhamento de resultados</h2>

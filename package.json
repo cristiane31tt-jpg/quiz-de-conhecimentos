@@ -1,0 +1,25 @@
+{
+  "name": "quiz-de-conhecimentos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Empacotamento Android do Quiz de Conhecimentos com Capacitor e banner de teste do Google AdMob.",
+  "scripts": {
+    "prepare:web": "node scripts/prepare-web.mjs",
+    "configure:android": "node scripts/configure-android.mjs",
+    "verify:android": "node scripts/verify-android.mjs",
+    "android:add": "npx cap add android",
+    "android:sync": "npx cap sync android",
+    "android:debug": "npm run prepare:web && npm run android:add && npm run android:sync && npm run configure:android && npm run verify:android"
+  },
+  "dependencies": {
+    "@capacitor-community/admob": "8.3.0",
+    "@capacitor/android": "8.6.0",
+    "@capacitor/core": "8.6.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.6.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

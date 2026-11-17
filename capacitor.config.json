@@ -1,0 +1,17 @@
+{
+  "appId": "com.minimonkey.quizdeconhecimentos",
+  "appName": "Quiz de Conhecimentos",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SystemBars": {
+      "style": "DARK",
+      "insetsHandling": "css"
+    }
+  }
+}
